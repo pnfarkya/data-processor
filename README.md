@@ -2,12 +2,13 @@ This project is CSV Data Processor for invoice details
 I have attached the sample CSV file for ref to test
 File instructions are given on the website whats the expected data formart accepted.
 
+Deployed code URL : https://pnfarkya.github.io/data-processor/index.html
 
 
 --------------------------------------------------------------- For Developers-------------------------------------------------------------
-# Getting Started with Create React App
+## to installt dependancy after clone:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### `npm install`
 
 ## Available Scripts
 
