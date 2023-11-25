@@ -1,5 +1,3 @@
-import logo from './logo.svg';
-import './App.css';
 import InvoiceProcessor from './Components/DataProcessor/InvoiceProcessor';
 import { Header } from './Components/Common/Header';
 
