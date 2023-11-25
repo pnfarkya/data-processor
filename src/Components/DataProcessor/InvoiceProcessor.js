@@ -26,20 +26,25 @@ class InvoiceProcessor extends React.Component {
     //region EventMethods
 
     HandleChange = (event) => {
-        if (event !== undefined && event.target !== undefined && event.target.files !== undefined && event.target.files.length > 0) {
-            var file = event.target.files[0];
-            if (file.type !== "text/csv") {
-                alert("Selected file is not a valid type , please select csv file only")
-            }
-            else {
-                var reader = new FileReader();
-                reader.onload = async ({ target }) => {
-                    var fileText = target.result;
-                    this.setState({ FileText: fileText });
+        try {
+            if (event !== undefined && event.target !== undefined && event.target.files !== undefined && event.target.files.length > 0) {
+                var file = event.target.files[0];
+                if (file.type !== "text/csv") {
+                    alert("Selected file is not a valid type , please select csv file only")
                 }
-                reader.readAsText(file);
-                this.setState({ DataFile: file });
+                else {
+                    var reader = new FileReader();
+                    reader.onload = async ({ target }) => {
+                        var fileText = target.result;
+                        this.setState({ FileText: fileText });
+                    }
+                    reader.readAsText(file);
+                    this.setState({ DataFile: file });
+                }
             }
+        } catch (err) {
+            console.error(err)
+            alert("Error while uploading file data, please  see console for full details")
         }
     }
 
@@ -51,11 +56,16 @@ class InvoiceProcessor extends React.Component {
     }
 
     HandlePost = () => {
-        if (this.state.DataRows != null && this.state.DataRows.length > 0) {
-            var rows = [...this.state.DataRows];
-            rows = rows.splice(0, rows.length - 1);
-            var customerInvoices = BuildCustomerInvoices(rows);
-            UploadInvoiceData(customerInvoices);
+        try {
+            if (this.state.DataRows != null && this.state.DataRows.length > 0) {
+                var rows = [...this.state.DataRows];
+                rows = rows.splice(0, rows.length - 1);
+                var customerInvoices = BuildCustomerInvoices(rows);
+                UploadInvoiceData(customerInvoices);
+            }
+        } catch (err) {
+            console.error(err)
+            alert("Error while uploadinf sending data, please see console for full details")
         }
     }
 
@@ -64,48 +74,54 @@ class InvoiceProcessor extends React.Component {
     //region helpers
 
     ValidateFileText = (fileText) => {
-        this.state.ValidationMessage = "";
-        var allLines = fileText.split("\n");
-        var totalInvoiceValue = 0.00;
-        if (allLines.length > 1) {
-            //Removing Header row
-            allLines.splice(0, 1);
+        try {
+            this.state.ValidationMessage = "";
+            var allLines = fileText.split("\n");
+            var totalInvoiceValue = 0.00;
+            if (allLines.length > 1) {
+                //Removing Header row
+                allLines.splice(0, 1);
 
-            var rows = [];
-            var invalidRows = [];
-            var rowNumber = 0;
-            allLines.forEach(line => {
-                var values = line.split(",");
-                rowNumber++;
-                if (this.IsValidRow(values)) {
-                    var invoiceValue = GetInvoiceValueWithDecimal(values[2]);
+                var rows = [];
+                var invalidRows = [];
+                var rowNumber = 0;
+                allLines.forEach(line => {
+                    var values = line.split(",");
+                    rowNumber++;
+                    if (this.IsValidRow(values)) {
+                        var invoiceValue = GetInvoiceValueWithDecimal(values[2]);
 
-                    rows.push({
-                        id: rowNumber,
-                        InvoiceNumber: values[0],
-                        CustomerNumber: Number(values[1]),
-                        InvoiceValue: invoiceValue
-                    })
-                    totalInvoiceValue = parseFloat(totalInvoiceValue) + parseFloat(invoiceValue);
-                }
-                else {
-                    invalidRows.push(rowNumber)
-                    this.setState({ InvalidRows: invalidRows })
-                }
-            });
-            console.log(rows);
+                        rows.push({
+                            id: rowNumber,
+                            InvoiceNumber: values[0],
+                            CustomerNumber: Number(values[1]),
+                            InvoiceValue: invoiceValue
+                        })
+                        totalInvoiceValue = parseFloat(totalInvoiceValue) + parseFloat(invoiceValue);
+                    }
+                    else {
+                        invalidRows.push(rowNumber)
+                        this.setState({ InvalidRows: invalidRows })
+                    }
+                });
+                console.log(rows);
 
-            //Adding total invoice value
-            rows.push({
-                id: "",
-                InvoiceNumber: "",
-                CustomerNumber: "Total Invoice Value",
-                InvoiceValue: Number(totalInvoiceValue).toFixed(2)
-            })
-            this.setState({ DataRows: rows, FileProcessTime: new Date().toLocaleTimeString(), CurrentFile: this.state.DataFile.name })
+                //Adding total invoice value
+                rows.push({
+                    id: "",
+                    InvoiceNumber: "",
+                    CustomerNumber: "Total Invoice Value",
+                    InvoiceValue: Number(totalInvoiceValue).toFixed(2)
+                })
+                this.setState({ DataRows: rows, FileProcessTime: new Date().toLocaleTimeString(), CurrentFile: this.state.DataFile.name })
+            }
+            else {
+                this.state.ValidationMessage = "No data to process, file data is empty";
+            }
         }
-        else {
-            this.state.ValidationMessage = "No data to process, file data is empty";
+        catch (err) {
+            console.error(err)
+            alert("Error while validating file data, please console see  for full details")
         }
     }
 
