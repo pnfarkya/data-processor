@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.js": "/data-processor/static/js/main.dd13a49e.js",
+    "static/js/787.cb63d829.chunk.js": "/data-processor/static/js/787.cb63d829.chunk.js",
+    "index.html": "/data-processor/index.html",
+    "main.dd13a49e.js.map": "/data-processor/static/js/main.dd13a49e.js.map",
+    "787.cb63d829.chunk.js.map": "/data-processor/static/js/787.cb63d829.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.dd13a49e.js"
+  ]
+}
