@@ -165,7 +165,7 @@ class InvoiceProcessor extends React.Component {
 
                 <Grid container spacing={2}>
                     <Grid item sm={12}>
-                        <FileUploaderControl HandleChange={this.HandleChange} AllowedExtentions={AllowedExtentions} />
+                        <FileUploaderControl HandleChange={this.HandleChange} AllowedExtentions={AllowedExtentions} SelectedFile={this.state.DataFile != null ? this.state.DataFile.name : ""} />
                     </Grid>
                     <Grid item sm={12} >
                         <Button variant="contained" onClick={this.HandleValidate} data-testid="ValidateData">Validate & Display Data</Button>
@@ -194,7 +194,9 @@ class InvoiceProcessor extends React.Component {
 
                             3. File type should be selected as csv <br />
 
-                            4. File columns sequence are  1. Invoice Number 2. Custormer Number 3. Invoice value</Typography>
+                            4. File columns sequence are  1. Invoice Number 2. Custormer Number 3. Invoice value <br />
+
+                            5. Last two digits of invoice value will be conisder in the decimal point</Typography>
                     </Grid>
                 </Grid>
             </Box >

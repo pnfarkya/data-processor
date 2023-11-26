@@ -42,6 +42,7 @@ export function BuildCustomerInvoices(rows) {
 
         if (customer === undefined || customer === null) {
 
+            //Adding new customer
             customer = {
                 CustomerNumber: r.CustomerNumber,
                 Invoices: []
@@ -53,6 +54,8 @@ export function BuildCustomerInvoices(rows) {
             })
             custInvoice.push(customer);
         }
+
+        //Updating invoice details to exitsitng cutomer
         else {
             customer.Invoices.push({
                 Number: r.InvoiceNumber,
@@ -61,7 +64,5 @@ export function BuildCustomerInvoices(rows) {
             })
         }
     })
-
     return custInvoice;
-
 }
